@@ -33,6 +33,19 @@ client.on(Events.InteractionCreate, async interaction => {
 	if (!interaction.isButton) return;
 
 	if (interaction.customId === 'open-ticket') {
+		const config2 = await config.get("system")
+		console.log(config2)
+		if ( config2.channel !== interaction.channel.id) {
+			const exampleEmbed2 = new EmbedBuilder()
+					.setColor("#c6d8a9")
+					.setTitle('Failed')
+					.setDescription('missing config')
+
+				await interaction.reply({
+					embeds: [exampleEmbed2], ephemeral: true
+				});
+			return;
+		}
 		const ticketdata = await tickets.get(interaction.user.id);
 		if (ticketdata !== undefined) {
 			if (ticketdata.activethread === true) {
@@ -56,7 +69,7 @@ client.on(Events.InteractionCreate, async interaction => {
 			type: ChannelType.PrivateThread,
 			reason: 'Created by Ticket System',
 		});
-		const config2 = await config.get("system")
+		
 		console.log(thread.id)
 		console.log(thread)
 		await thread.members.add(interaction.user.id);
